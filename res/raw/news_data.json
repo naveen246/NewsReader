@@ -1,0 +1,10 @@
+{
+    "India": {
+        "Indian Express": "http://indianexpress.com/section/india/feed/",
+        "NDTV": "http://feeds.feedburner.com/ndtv/Lsgd"
+    },
+    "Technology": {
+        "NDTV": "http://feeds.feedburner.com/NDTV-Tech",
+        "Reuters": "http://feeds.reuters.com/reuters/INtechnologyNews"
+    }
+}
