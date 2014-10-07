@@ -25,6 +25,10 @@
             android:name=".NewsListActivity">
         </activity>
         
+        <activity 
+            android:name=".NewsPageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        
     </application>
 
 </manifest>

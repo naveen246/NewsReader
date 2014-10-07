@@ -15,14 +15,21 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f080003;
+        public static final int action_settings=0x7f080008;
         public static final int category_dropdown=0x7f080001;
         public static final int fragmentContainer=0x7f080000;
+        public static final int newsPage_progressBar=0x7f080003;
+        public static final int news_date_textView=0x7f080006;
+        public static final int news_snippet_textView=0x7f080007;
         public static final int news_source_list=0x7f080002;
+        public static final int news_title_textView=0x7f080005;
+        public static final int webView=0x7f080004;
     }
     public static final class layout {
         public static final int activity_news=0x7f030000;
         public static final int fragment_news_category=0x7f030001;
+        public static final int fragment_news_page=0x7f030002;
+        public static final int news_list_item=0x7f030003;
     }
     public static final class menu {
         public static final int news_activity_menu=0x7f070000;

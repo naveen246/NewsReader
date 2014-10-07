@@ -1,6 +1,7 @@
 package in.digitrack.newsreader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -12,7 +13,7 @@ public class FeedDownloader extends HandlerThread {
 	Handler mHandler;
 	Handler mResponseHandler;
 	Listener mListener;
-	String xmlString;
+	ArrayList<News> mNewsList;
 	
 	public static final int MESSAGE_DOWNLOAD = 0;
 	
@@ -22,7 +23,7 @@ public class FeedDownloader extends HandlerThread {
 	}
 	
 	public interface Listener {
-		public void onFeedDownloaded(String xmlString);
+		public void onFeedDownloaded(ArrayList<News> newsList);
 	}
 	
 	public void setListener(Listener listener) {
@@ -37,16 +38,15 @@ public class FeedDownloader extends HandlerThread {
 			@Override
 			public void handleMessage(Message msg) {
 				if(msg.what == MESSAGE_DOWNLOAD) {
+					String url = FeedFetchr.buildUrl((String)msg.obj);
 					try {
-						xmlString = new FeedFetchr().getXmlString((String)msg.obj);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						mNewsList = new FeedFetchr().getResult(url);
+					} catch (Exception e) { }
+					
 					mResponseHandler.post(new Runnable() {
 						@Override
 						public void run() {
-							mListener.onFeedDownloaded(xmlString);
+							mListener.onFeedDownloaded(mNewsList);
 						}
 					});
 				}

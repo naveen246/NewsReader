@@ -1,8 +1,5 @@
 package in.digitrack.newsreader;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -21,7 +18,6 @@ public class NewsData {
 
 	private NewsData(Context appContext) {
 		mAppContext = appContext;
-		loadJSONData();
 	}
 	
 	public static NewsData get(Context c) {
@@ -31,36 +27,44 @@ public class NewsData {
 		return sNewsData;
 	}
 	
+	public boolean isDataAvailable() {
+		return mJSONObj != null;
+	}
+	
 	public ArrayList<String> getNewsSources(String category) {
-		if(mJSONObj == null)
-			loadJSONData();
-		ArrayList<String> newsSources = new ArrayList<String>();
-		try {
-			if(mJSONObj.has(category)) {
-				JSONObject obj = mJSONObj.getJSONObject(category);
-				JSONArray arr = obj.names();
-				for(int i = 0; i < arr.length(); i++) {
-					newsSources.add(arr.getString(i));
+		if(mJSONObj != null) {
+			ArrayList<String> newsSources = new ArrayList<String>();
+			try {
+				if(mJSONObj.has(category)) {
+					JSONObject obj = mJSONObj.getJSONObject(category);
+					JSONArray arr = obj.names();
+					for(int i = 0; i < arr.length(); i++) {
+						newsSources.add(arr.getString(i));
+					}
 				}
-			}
-			
-		} catch(Exception e) { }
-		Collections.sort(newsSources);
-		return newsSources;
+				
+			} catch(Exception e) { }
+			Collections.sort(newsSources);
+			return newsSources;
+		} else {
+			return null;
+		}
 	}
 
 	public ArrayList<String> getNewsCategories() {
-		if(mJSONObj == null)
-			loadJSONData();
-		ArrayList<String> categories = new ArrayList<String>();
-		JSONArray arr = mJSONObj.names();
-		for(int i = 0; i < arr.length(); i++) {
-			try {
-				categories.add(arr.getString(i));
-			} catch (JSONException e) { }
+		if(mJSONObj != null) {
+			ArrayList<String> categories = new ArrayList<String>();
+			JSONArray arr = mJSONObj.names();
+			for(int i = 0; i < arr.length(); i++) {
+				try {
+					categories.add(arr.getString(i));
+				} catch (JSONException e) { }
+			}
+			Collections.sort(categories);
+			return categories;
+		} else {
+			return null;
 		}
-		Collections.sort(categories);
-		return categories;
 	}
 	
 	public String getFeedUrl(String category, String source) {
@@ -76,22 +80,9 @@ public class NewsData {
 		return url;
 	}
 	
-	private void loadJSONData() {
-		BufferedReader reader = null;
+	public void loadJSONData(String jsonString) {
 		try {
-			InputStream in = mAppContext.getResources().openRawResource(R.raw.news_data);
-			reader = new BufferedReader(new InputStreamReader(in));
-			StringBuilder jsonString = new StringBuilder();
-			String line = new String();
-			while((line = reader.readLine()) != null) {
-				jsonString.append(line);
-			}
-			
-			mJSONObj = (JSONObject) new JSONTokener(jsonString.toString()).nextValue();
-			
-			if(reader != null)
-				reader.close();
+			mJSONObj = (JSONObject) new JSONTokener(jsonString).nextValue();
 		} catch(Exception e) {}
 	}
-	
 }

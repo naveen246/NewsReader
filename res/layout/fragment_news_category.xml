@@ -8,14 +8,13 @@
 	    	android:id="@+id/category_dropdown"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
-	    	android:background="#bcd7e5"
-	    	android:layout_marginBottom="20dp" />
+	    	android:padding="15dp" />
     
     <ListView 
 		android:id="@+id/news_source_list"
 		android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	     >
+	    android:layout_marginTop="15dp" >
 	    
 	</ListView>
     
