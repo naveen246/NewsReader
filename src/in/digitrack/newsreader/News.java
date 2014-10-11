@@ -22,12 +22,12 @@ public class News {
 		return mPublishedDate;
 	}
 	public void setPublishedDate(String publishedDate) {
-		if(publishedDate.trim().equals("")) {
-			mPublishedDate = "";
-			return;
+		if(publishedDate.contains(":")) {
+			String[] parts = publishedDate.split(":", 3);
+			mPublishedDate = parts[0] + ":" + parts[1];
+		} else {
+			mPublishedDate = publishedDate;
 		}
-		String[] parts = publishedDate.split(":");
-		mPublishedDate = parts[0] + ":" + parts[1];
 	}
 	public String getContentSnippet() {
 		return mContentSnippet;
