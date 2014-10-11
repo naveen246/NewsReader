@@ -95,9 +95,9 @@ public class NewsListFragment extends ListFragment {
 	}
 	
 	@Override
-	public void onPause() {
+	public void onDestroy() {
 		mFeedThread.quit();
-		super.onPause();
+		super.onDestroy();
 	}
 	
 }

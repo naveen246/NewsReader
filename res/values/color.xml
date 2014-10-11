@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_shade">#99d5cf</color>
- 	<color name="light_shade">#cceae7</color>
+    <color name="dark_shade">#cceae7</color>
+ 	<color name="light_shade">#ffffff</color>
  	<color name="notification_background">#333333</color>
  	<color name="news_title_color">#204c39</color>
 </resources>
