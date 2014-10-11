@@ -22,6 +22,10 @@ public class News {
 		return mPublishedDate;
 	}
 	public void setPublishedDate(String publishedDate) {
+		if(publishedDate.trim().equals("")) {
+			mPublishedDate = "";
+			return;
+		}
 		String[] parts = publishedDate.split(":");
 		mPublishedDate = parts[0] + ":" + parts[1];
 	}
