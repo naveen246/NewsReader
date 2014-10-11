@@ -1,6 +1,5 @@
 package in.digitrack.newsreader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;

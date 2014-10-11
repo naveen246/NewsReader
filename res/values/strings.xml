@@ -2,6 +2,10 @@
 
     <string name="app_name">NewsReader</string>
     <string name="action_categories">Categories</string>
-    <string name="action_settings">Settings</string>
+    <string name="enable_notification">Enable Notification</string>
+    <string name="disable_notification">Disable Notification</string>
+    <string name="news">News</string>
+    <string name="notification_image">Notification Image</string>
+    <string name="select_category">Select Category</string>
 
 </resources>

@@ -22,7 +22,8 @@ public class News {
 		return mPublishedDate;
 	}
 	public void setPublishedDate(String publishedDate) {
-		mPublishedDate = publishedDate;
+		String[] parts = publishedDate.split(":");
+		mPublishedDate = parts[0] + ":" + parts[1];
 	}
 	public String getContentSnippet() {
 		return mContentSnippet;

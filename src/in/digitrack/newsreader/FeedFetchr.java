@@ -13,13 +13,14 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.net.Uri;
-import android.util.Log;
 
 public class FeedFetchr {
 	
 	private static final String ENDPOINT = "https://ajax.googleapis.com/ajax/services/feed/load";
 	private static final String VERSION = "2.0";
 	private static final String NUMBER_OF_ENTRIES = "20";
+	
+	public static final String LAST_POLLED_NEWS = "lastPolledNews";
 	
 	public static String buildUrl(String feedUrl) {
 		String url = Uri.parse(ENDPOINT).buildUpon()

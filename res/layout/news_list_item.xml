@@ -2,23 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    android:orientation="vertical" >
     
     <TextView 
     	android:id="@+id/news_title_textView"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:textSize="17sp"
-    	android:textStyle="bold" />
+    	android:textSize="18sp"
+    	android:textStyle="bold"
+    	android:paddingLeft="10dp"
+    	android:paddingTop="10dp"
+    	android:paddingRight="10dp" />
     <TextView 
         android:id="@+id/news_date_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:layout_marginLeft="10dp" />
     <TextView 
         android:id="@+id/news_snippet_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="15sp" />
 
 </LinearLayout>

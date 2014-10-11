@@ -2,6 +2,7 @@ package in.digitrack.newsreader;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,11 @@ public class NewsPageFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		mUrl = getActivity().getIntent().getData().toString();
+		Intent intent = getActivity().getIntent();
+		if(intent != null) {
+			String newsSource = intent.getStringExtra(NewsListFragment.NEWS_SOURCE);
+			getActivity().getActionBar().setTitle(newsSource);
+		}
 	}
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -32,6 +38,10 @@ public class NewsPageFragment extends Fragment {
 		mProgressBar = (ProgressBar)v.findViewById(R.id.newsPage_progressBar);
 		
 		mWebView.getSettings().setJavaScriptEnabled(true);
+		mWebView.getSettings().setLoadWithOverviewMode(true);
+		mWebView.getSettings().setUseWideViewPort(true);
+		mWebView.getSettings().setBuiltInZoomControls(true);
+		mWebView.getSettings().setDisplayZoomControls(false);
 		
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override

@@ -13,6 +13,7 @@ import android.content.Context;
 public class NewsData {
 	private static NewsData sNewsData;
 	private Context mAppContext;
+	public static final String TOP_STORIES = "Top Stories";
 	
 	private JSONObject mJSONObj;
 
@@ -84,5 +85,13 @@ public class NewsData {
 		try {
 			mJSONObj = (JSONObject) new JSONTokener(jsonString).nextValue();
 		} catch(Exception e) {}
+	}
+	
+	public String getTopStoriesData() {
+		JSONObject obj = null;
+		try {
+			obj = mJSONObj.getJSONObject(TOP_STORIES);
+		} catch (JSONException e) {}
+		return obj.toString();
 	}
 }

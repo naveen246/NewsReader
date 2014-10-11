@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,10 +21,7 @@ public class NewsListFragment extends ListFragment {
 	public static final String NEWS_SOURCE = "in.digitrack.newsreader.news_source";
 	public static final String FEED_URL = "in.digitrack.newsreader.feed_url";
 
-	public static Fragment newInstance(String newsSource, String feedUrl) {
-		Bundle args = new Bundle();
-		args.putString(NEWS_SOURCE, newsSource);
-		args.putString(FEED_URL, feedUrl);
+	public static Fragment newInstance(Bundle args) {
 		Fragment fragment = new NewsListFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -34,19 +30,20 @@ public class NewsListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("newsreader", getArguments().getString(NEWS_SOURCE));
-		Log.d("newsreader", getArguments().getString(FEED_URL));
 		mFeedThread = new FeedDownloader(new Handler());
 		mFeedThread.setListener(new FeedDownloader.Listener() {
 			@Override
 			public void onFeedDownloaded(ArrayList<News> newsList) {
-				NewsAdapter adapter = new NewsAdapter(newsList);
-				setListAdapter(adapter);
+				try {
+					NewsAdapter adapter = new NewsAdapter(newsList);
+					setListAdapter(adapter);
+				} catch(Exception e) {}
 			}
 		});
 		mFeedThread.start();
 		mFeedThread.getLooper();
 		setRetainInstance(true);
+		getActivity().getActionBar().setTitle(getArguments().getString(NEWS_SOURCE));
 	}
 	
 	@Override
@@ -56,6 +53,7 @@ public class NewsListFragment extends ListFragment {
 		Uri newsPageUri = Uri.parse(news.getLink());
 		Intent i = new Intent(getActivity(), NewsPageActivity.class);
 		i.setData(newsPageUri);
+		i.putExtra(NEWS_SOURCE, getArguments().getString(NEWS_SOURCE));
 		startActivity(i);
 	}
 	
@@ -67,8 +65,15 @@ public class NewsListFragment extends ListFragment {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if(convertView == null) {
-				convertView = getActivity().getLayoutInflater().inflate(R.layout.news_list_item, null);
+				convertView = getActivity().getLayoutInflater().inflate(R.layout.news_list_item, parent, false);
 			}
+
+			if(position % 2 == 0) {
+				convertView.setBackgroundColor(getResources().getColor(R.color.dark_shade));
+			} else {
+				convertView.setBackgroundColor(getResources().getColor(R.color.light_shade));
+			}
+			
 			TextView newsTitleTxtView = (TextView)convertView.findViewById(R.id.news_title_textView);
 			TextView newsDateTxtView = (TextView)convertView.findViewById(R.id.news_date_textView);
 			TextView newsSnippetTxtView = (TextView)convertView.findViewById(R.id.news_snippet_textView);
@@ -86,12 +91,13 @@ public class NewsListFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		mFeedThread.queueTask(getArguments().getString(FEED_URL));
+		getListView().setSelector(android.R.color.darker_gray);
 	}
 	
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public void onPause() {
 		mFeedThread.quit();
+		super.onPause();
 	}
 	
 }
