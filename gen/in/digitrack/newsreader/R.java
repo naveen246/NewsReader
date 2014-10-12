@@ -19,19 +19,23 @@ public final class R {
     public static final class drawable {
         public static final int ic_folder_icon=0x7f020000;
         public static final int ic_launcher=0x7f020001;
+        public static final int ic_lista_quinielas=0x7f020002;
     }
     public static final class id {
-        public static final int category_dropdown=0x7f090001;
+        public static final int category_listView=0x7f090005;
+        public static final int category_textView=0x7f090003;
+        public static final int drawer_layout=0x7f090001;
         public static final int fragmentContainer=0x7f090000;
-        public static final int newsPage_progressBar=0x7f090003;
-        public static final int news_date_textView=0x7f090006;
-        public static final int news_snippet_textView=0x7f090007;
-        public static final int news_source_list=0x7f090002;
-        public static final int news_title_textView=0x7f090005;
-        public static final int notification_imgView=0x7f090008;
-        public static final int notification_settings=0x7f09000a;
-        public static final int notification_textView=0x7f090009;
-        public static final int webView=0x7f090004;
+        public static final int newsPage_progressBar=0x7f090006;
+        public static final int news_date_textView=0x7f090009;
+        public static final int news_snippet_textView=0x7f09000a;
+        public static final int news_source_list=0x7f090004;
+        public static final int news_title_textView=0x7f090008;
+        public static final int notification_imgView=0x7f09000b;
+        public static final int notification_settings=0x7f09000d;
+        public static final int notification_textView=0x7f09000c;
+        public static final int show_drawer_button=0x7f090002;
+        public static final int webView=0x7f090007;
     }
     public static final class layout {
         public static final int activity_news=0x7f030000;

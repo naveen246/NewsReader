@@ -6,41 +6,51 @@ import java.util.ArrayList;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 //https://raw.githubusercontent.com/naveen246/news_sources/master/news_data.json
 
 public class NewsCategoryFragment extends Fragment {
 	public static final String CATEGORY = "in.digitrack.newsreader.category";
-	public static final String DEFAULT_CATEGORY = "India";
+	public static final String DEFAULT_CATEGORY = "Top Stories";
 	private static final String NEWS_DATA_URL = "https://raw.githubusercontent.com/naveen246/news_sources/master/news_data.json";
 	
-	private Spinner categoryDropDown;
+	private DrawerLayout mDrawerLayout;
+	private Button showCategoryBtn;
+	private ListView mCategoryDrawer;
 	private ListView newsSourceList;
 	private String mCurrentCategory;
 	private NewsData mNewsData;
+	private TextView categoryTxtView;
+	
+	private SharedPreferences prefs;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mNewsData = NewsData.get(getActivity());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		new NewsDataDownload().execute();
+		mCurrentCategory = prefs.getString(CATEGORY, null);
 		setRetainInstance(true);
 	}
 	
 	public void startNewsListActivity(String newsSource, String url) {
+		prefs.edit().putString(CATEGORY, mCurrentCategory).commit();
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
 		i.putExtra(NewsListFragment.NEWS_SOURCE, newsSource);
 		i.putExtra(NewsListFragment.FEED_URL, url);
@@ -51,18 +61,34 @@ public class NewsCategoryFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_news_category, container, false);
 		
-		categoryDropDown = (Spinner)v.findViewById(R.id.category_dropdown);
+		mCategoryDrawer = (ListView)v.findViewById(R.id.category_listView);
 		newsSourceList = (ListView)v.findViewById(R.id.news_source_list);
+		mDrawerLayout = (DrawerLayout) v.findViewById(R.id.drawer_layout);
+		showCategoryBtn = (Button)v.findViewById(R.id.show_drawer_button);
+		categoryTxtView = (TextView)v.findViewById(R.id.category_textView);
 		
-		categoryDropDown.setOnItemSelectedListener(new OnItemSelectedListener() {
+		showCategoryBtn.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				mCurrentCategory = (String) parent.getItemAtPosition(position);
-				updateNewsSources(mCurrentCategory);
+			public void onClick(View v) {
+				mDrawerLayout.openDrawer(mCategoryDrawer);
 			}
-
+		});
+		
+		categoryTxtView.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) { }
+			public void onClick(View v) {
+				mDrawerLayout.openDrawer(mCategoryDrawer);
+			}
+		});
+		
+		mCategoryDrawer.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				mCurrentCategory = (String) parent.getItemAtPosition(position);
+				categoryTxtView.setText(mCurrentCategory);
+				updateNewsSources(mCurrentCategory);
+				mDrawerLayout.closeDrawer(mCategoryDrawer);
+			}
 		});
 		
 		newsSourceList.setOnItemClickListener(new OnItemClickListener() {
@@ -83,10 +109,12 @@ public class NewsCategoryFragment extends Fragment {
 		if(mNewsData.isDataAvailable()) {
 			ArrayList<String> categories = mNewsData.getNewsCategories();
 			CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
-			categoryDropDown.setAdapter(categoryAdapter);
-			
-			String category = categoryDropDown.getSelectedItem().toString();
-			updateNewsSources(category);
+			mCategoryDrawer.setAdapter(categoryAdapter);
+			if(mCurrentCategory == null) {
+				mCurrentCategory = DEFAULT_CATEGORY;
+			}
+			categoryTxtView.setText(mCurrentCategory);
+			updateNewsSources(mCurrentCategory);
 		}
 	}
 	
@@ -139,15 +167,13 @@ public class NewsCategoryFragment extends Fragment {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			if(dialog.isShowing())
+			if(dialog.isShowing()) {
 				dialog.dismiss();
+			}
 			if(result != null) {
 				mNewsData.loadJSONData(result);
 				updateUI();
-				PreferenceManager.getDefaultSharedPreferences(getActivity())
-					.edit()
-					.putString(NewsData.TOP_STORIES, mNewsData.getTopStoriesData())
-					.commit();
+				prefs.edit().putString(NewsData.TOP_STORIES, mNewsData.getTopStoriesData()).commit();
 			}
 		}
 		
@@ -155,6 +181,7 @@ public class NewsCategoryFragment extends Fragment {
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(getActivity());
 			dialog.setMessage("Loading data");
+			dialog.setCancelable(true);
 			dialog.show();
 		}
 	}
