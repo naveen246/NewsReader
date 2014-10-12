@@ -71,7 +71,7 @@ public class PollService extends IntentService {
 		stackBuilder.addParentStack(NewsListActivity.class);
 		stackBuilder.addNextIntent(i);
 		// Gets a PendingIntent containing the entire back stack
-		PendingIntent pi = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pi = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
 		
 		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
 		remoteViews.setTextViewText(R.id.notification_textView, newsData.get(0).getTitle());
